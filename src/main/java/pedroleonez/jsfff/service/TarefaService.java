@@ -37,6 +37,14 @@ public class TarefaService implements Serializable {
         return repository.buscarTodas();
     }
 
+    /**
+     * Novo método para busca avançada com filtros dinâmicos
+     */
+    public List<Tarefa> listarComFiltros(Long id, String texto, String responsavel, Boolean concluida) {
+        // Chamamos o repository que conterá a lógica de Criteria API ou JPQL dinâmica
+        return repository.buscarComFiltros(id, texto, responsavel, concluida);
+    }
+
     public void remover(Tarefa tarefa) {
         EntityTransaction tx = em.getTransaction();
         try {
