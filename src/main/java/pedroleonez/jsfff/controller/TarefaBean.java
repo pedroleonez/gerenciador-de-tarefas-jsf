@@ -10,6 +10,7 @@ import pedroleonez.jsfff.model.Tarefa;
 import pedroleonez.jsfff.model.Prioridade;
 import pedroleonez.jsfff.service.TarefaService;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @ViewScoped
 public class TarefaBean implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Inject
@@ -24,7 +26,7 @@ public class TarefaBean implements Serializable {
 
     private Tarefa tarefa = new Tarefa();
     private List<Tarefa> tarefas;
-    private List<Tarefa> tarefasFiltradas; // Necessário para o filtro do DataTable
+    private List<Tarefa> tarefasFiltradas;
 
     @PostConstruct
     public void init() {
@@ -35,7 +37,7 @@ public class TarefaBean implements Serializable {
         try {
             service.salvar(tarefa);
             adicionarMensagem("Sucesso!", "Tarefa salva com êxito.");
-            tarefa = new Tarefa(); // Limpa o formulário após salvar
+            tarefa = new Tarefa();
             atualizarLista();
         } catch (Exception e) {
             adicionarMensagem("Erro", "Falha ao salvar tarefa: " + e.getMessage());
@@ -43,7 +45,6 @@ public class TarefaBean implements Serializable {
     }
 
     public void prepararEdicao(Tarefa t) {
-        // Clona a tarefa para não alterar a linha da tabela antes de salvar
         this.tarefa = t;
     }
 
