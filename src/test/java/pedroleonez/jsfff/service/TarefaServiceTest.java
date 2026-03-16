@@ -11,10 +11,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pedroleonez.jsfff.exception.InfrastructureException;
 import pedroleonez.jsfff.exception.ResourceNotFoundException;
 import pedroleonez.jsfff.exception.ValidationException;
+import pedroleonez.jsfff.model.Prioridade;
 import pedroleonez.jsfff.model.Tarefa;
 import pedroleonez.jsfff.repository.TarefaRepository;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
@@ -52,8 +54,18 @@ class TarefaServiceTest {
     }
 
     @Test
-    void deveTraduzirErroTecnicoAoSalvar() {
+    void deveLancarValidationExceptionAoSalvarTarefaSemCamposObrigatorios() {
         Tarefa tarefa = new Tarefa();
+
+        assertThrows(ValidationException.class, () -> service.salvar(tarefa));
+
+        verify(entityManager, never()).getTransaction();
+        verify(repository, never()).salvar(tarefa);
+    }
+
+    @Test
+    void deveTraduzirErroTecnicoAoSalvar() {
+        Tarefa tarefa = criarTarefaValida();
         when(transaction.isActive()).thenReturn(true);
         doThrow(new PersistenceException("falha de banco")).when(repository).salvar(tarefa);
 
@@ -141,5 +153,15 @@ class TarefaServiceTest {
         Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    private static Tarefa criarTarefaValida() {
+        Tarefa tarefa = new Tarefa();
+        tarefa.setTitulo("Preparar entrega");
+        tarefa.setDescricao("Organizar os itens da sprint");
+        tarefa.setResponsavel("Pedro");
+        tarefa.setPrioridade(Prioridade.ALTA);
+        tarefa.setDeadline(LocalDate.now().plusDays(1));
+        return tarefa;
     }
 }

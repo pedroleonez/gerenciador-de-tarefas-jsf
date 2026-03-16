@@ -13,17 +13,20 @@
                 <h:panelGroup layout="block" styleClass="cadastro-grid">
                     <h:panelGroup layout="block" styleClass="form-field">
                         <p:outputLabel for="titulo" value="Título:" style="font-weight:bold"/>
-                        <p:inputText id="titulo" value="#{tarefaBean.tarefa.titulo}"/>
+                        <p:inputText id="titulo" value="#{tarefaBean.tarefa.titulo}"
+                                     required="true" requiredMessage="O título é obrigatório"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" styleClass="form-field">
                         <p:outputLabel for="responsavel" value="Responsável:" style="font-weight:bold"/>
-                        <p:inputText id="responsavel" value="#{tarefaBean.tarefa.responsavel}"/>
+                        <p:inputText id="responsavel" value="#{tarefaBean.tarefa.responsavel}"
+                                     required="true" requiredMessage="O responsável é obrigatório"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" styleClass="form-field">
                         <p:outputLabel for="prioridade" value="Prioridade:" style="font-weight:bold"/>
-                        <p:selectOneMenu id="prioridade" value="#{tarefaBean.tarefa.prioridade}">
+                        <p:selectOneMenu id="prioridade" value="#{tarefaBean.tarefa.prioridade}"
+                                         required="true" requiredMessage="A prioridade é obrigatória">
                             <f:selectItem itemLabel="Selecione..." itemValue="#{null}" noSelectionOption="true"/>
                             <f:selectItems value="#{tarefaBean.prioridades}"/>
                         </p:selectOneMenu>
@@ -33,12 +36,15 @@
                         <p:outputLabel for="deadline" value="Deadline:" style="font-weight:bold"/>
                         <p:datePicker id="deadline" value="#{tarefaBean.tarefa.deadline}"
                                       showIcon="true"
+                                      required="true"
+                                      requiredMessage="O deadline é obrigatório"
                                       mindate="#{tarefaBean.dataAtual}"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" styleClass="form-field">
                         <p:outputLabel for="desc" value="Descrição:" style="font-weight:bold"/>
-                        <p:inputTextarea id="desc" value="#{tarefaBean.tarefa.descricao}" rows="2"/>
+                        <p:inputTextarea id="desc" value="#{tarefaBean.tarefa.descricao}" rows="2"
+                                         required="true" requiredMessage="A descrição é obrigatória"/>
                     </h:panelGroup>
 
                     <h:panelGroup layout="block" styleClass="form-actions">

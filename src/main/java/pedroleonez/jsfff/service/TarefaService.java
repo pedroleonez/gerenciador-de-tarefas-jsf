@@ -4,6 +4,10 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import pedroleonez.jsfff.exception.InfrastructureException;
 import pedroleonez.jsfff.exception.ResourceNotFoundException;
 import pedroleonez.jsfff.exception.ValidationException;
@@ -13,8 +17,10 @@ import pedroleonez.jsfff.repository.TarefaRepository;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Camada de negócio responsável por validar operações e controlar transações antes
@@ -26,6 +32,7 @@ public class TarefaService implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = Logger.getLogger(TarefaService.class.getName());
+    private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Inject
     private TarefaRepository repository;
@@ -37,6 +44,7 @@ public class TarefaService implements Serializable {
         if (tarefa == null) {
             throw new ValidationException("Nenhuma tarefa foi informada para salvar.");
         }
+        validarCamposObrigatorios(tarefa);
 
         // A transação fica concentrada no serviço para manter a regra de negócio consistente.
         EntityTransaction tx = em.getTransaction();
@@ -44,6 +52,9 @@ public class TarefaService implements Serializable {
             tx.begin();
             repository.salvar(tarefa);
             tx.commit();
+        } catch (ConstraintViolationException e) {
+            if (tx.isActive()) tx.rollback();
+            throw new ValidationException(montarMensagemValidacao(e.getConstraintViolations()));
         } catch (PersistenceException | IllegalArgumentException e) {
             if (tx.isActive()) tx.rollback();
             LOGGER.log(Level.SEVERE, "Erro tecnico ao salvar tarefa", e);
@@ -152,5 +163,19 @@ public class TarefaService implements Serializable {
         if (repository.buscarPorId(id) == null) {
             throw new ResourceNotFoundException("A tarefa selecionada nao existe mais.");
         }
+    }
+
+    private void validarCamposObrigatorios(Tarefa tarefa) {
+        Set<ConstraintViolation<Tarefa>> violations = VALIDATOR.validate(tarefa);
+        if (!violations.isEmpty()) {
+            throw new ValidationException(montarMensagemValidacao(violations));
+        }
+    }
+
+    private String montarMensagemValidacao(Set<? extends ConstraintViolation<?>> violations) {
+        return violations.stream()
+                .map(ConstraintViolation::getMessage)
+                .distinct()
+                .collect(Collectors.joining(" "));
     }
 }
