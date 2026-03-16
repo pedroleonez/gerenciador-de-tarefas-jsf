@@ -26,4 +26,9 @@
         <param-value>Development</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>primefaces.CLIENT_SIDE_LOCALISATION</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
 </web-app>

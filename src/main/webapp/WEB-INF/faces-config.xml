@@ -4,6 +4,10 @@
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd"
               version="4.0">
 
+    <locale-config>
+        <default-locale>pt_BR</default-locale>
+    </locale-config>
+
     <factory>
         <exception-handler-factory>
             pedroleonez.jsfff.exception.jsf.GlobalExceptionHandlerFactory
