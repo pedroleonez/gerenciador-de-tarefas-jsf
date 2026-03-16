@@ -1,0 +1,21 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:h="jakarta.faces.html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:cc="jakarta.faces.composite">
+    <cc:interface>
+        <cc:attribute name="author" required="false" default="Pedro Leonez"/>
+        <cc:attribute name="year" required="false" default="2026"/>
+    </cc:interface>
+
+    <cc:implementation>
+        <div class="footer">
+            <h:form id="formFooter">
+                <h:outputLink value="https://www.esig.com.br" target="_blank">
+                    <p:graphicImage library="images" name="logo-esig.webp" alt="Logo ESIG"/>
+                </h:outputLink>
+                <p>© #{cc.attrs.year} Desenvolvido por #{cc.attrs.author}</p>
+            </h:form>
+        </div>
+    </cc:implementation>
+</ui:component>

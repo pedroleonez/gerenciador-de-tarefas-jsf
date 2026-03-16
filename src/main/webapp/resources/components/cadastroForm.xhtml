@@ -1,0 +1,52 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:h="jakarta.faces.html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:f="jakarta.faces.core"
+              xmlns:cc="jakarta.faces.composite">
+    <cc:interface/>
+
+    <cc:implementation>
+        <h:form id="formCadastro">
+            <p:panel header="Cadastrar Tarefa" toggleable="true" styleClass="form-panel">
+                <h:panelGroup layout="block" styleClass="cadastro-grid">
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel for="titulo" value="Título:" style="font-weight:bold"/>
+                        <p:inputText id="titulo" value="#{tarefaBean.tarefa.titulo}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel for="responsavel" value="Responsável:" style="font-weight:bold"/>
+                        <p:inputText id="responsavel" value="#{tarefaBean.tarefa.responsavel}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel for="prioridade" value="Prioridade:" style="font-weight:bold"/>
+                        <p:selectOneMenu id="prioridade" value="#{tarefaBean.tarefa.prioridade}">
+                            <f:selectItem itemLabel="Selecione..." itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{tarefaBean.prioridades}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel for="deadline" value="Deadline:" style="font-weight:bold"/>
+                        <p:datePicker id="deadline" value="#{tarefaBean.tarefa.deadline}"
+                                      showIcon="true"
+                                      mindate="#{tarefaBean.dataAtual}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel for="desc" value="Descrição:" style="font-weight:bold"/>
+                        <p:inputTextarea id="desc" value="#{tarefaBean.tarefa.descricao}" rows="2"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup layout="block" styleClass="form-actions">
+                        <p:commandButton value="Salvar" action="#{tarefaBean.salvar}"
+                                         update="@form :listagemComp:formListagem :messages"
+                                         icon="pi pi-save" styleClass="ui-button-success"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </p:panel>
+        </h:form>
+    </cc:implementation>
+</ui:component>

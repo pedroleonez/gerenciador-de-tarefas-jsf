@@ -1,0 +1,72 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:h="jakarta.faces.html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:f="jakarta.faces.core"
+              xmlns:cc="jakarta.faces.composite">
+    <cc:interface/>
+
+    <cc:implementation>
+        <h:form id="formListagem">
+            <p:panel header="Consultar Tarefas" styleClass="form-panel">
+                <h:panelGroup layout="block" styleClass="filtro-grid">
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel value="Número:" style="display:block"/>
+                        <p:inputText value="#{tarefaBean.filtroId}" placeholder="Ex: 123"/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel value="Título / Descrição:" style="display:block"/>
+                        <p:inputText value="#{tarefaBean.filtroTexto}" placeholder="Pesquisar..."/>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel value="Responsável:" style="display:block"/>
+                        <p:selectOneMenu value="#{tarefaBean.filtroResponsavel}">
+                            <f:selectItem itemLabel="Todos" itemValue=""/>
+                            <f:selectItems value="#{tarefaBean.listaResponsaveis}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="form-field">
+                        <p:outputLabel value="Situação:" style="display:block"/>
+                        <p:selectOneMenu value="#{tarefaBean.filtroConcluida}">
+                            <f:selectItem itemLabel="Todas" itemValue="#{null}"/>
+                            <f:selectItem itemLabel="Em andamento" itemValue="false"/>
+                            <f:selectItem itemLabel="Concluída" itemValue="true"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <f:facet name="footer">
+                    <h:panelGroup layout="block" styleClass="filtro-footer">
+                        <p:commandButton value="Buscar Tarefas" action="#{tarefaBean.buscar}"
+                                         icon="pi pi-search" update="tabelaTarefas :messages"
+                                         styleClass="ui-button-raised"/>
+                    </h:panelGroup>
+                </f:facet>
+            </p:panel>
+
+            <p:dataTable id="tabelaTarefas" value="#{tarefaBean.tarefas}" var="t"
+                         emptyMessage="Nenhuma tarefa encontrada." paginator="true" rows="10"
+                         paginatorPosition="bottom" reflow="true">
+                <p:column headerText="Número" width="80" sortBy="#{t.id}">
+                    <h:outputText value="#{t.id}"/>
+                </p:column>
+                <p:column headerText="Título" sortBy="#{t.titulo}">
+                    <h:outputText value="#{t.titulo}" styleClass="#{t.concluida ? 'concluida' : ''}"/>
+                </p:column>
+                <p:column headerText="Responsável" sortBy="#{t.responsavel}">
+                    <h:outputText value="#{t.responsavel}"/>
+                </p:column>
+                <p:column headerText="Ações" width="200" styleClass="actions-column">
+                    <p:commandButton icon="pi pi-pencil" action="#{tarefaBean.prepararEdicao(t)}"
+                                     update=":cadastroComp:formCadastro" styleClass="ui-button-outlined ui-button-info mr-2"/>
+                    <p:commandButton icon="pi pi-check" action="#{tarefaBean.concluir(t)}"
+                                     update="formListagem :messages" rendered="#{!t.concluida}"
+                                     styleClass="ui-button-outlined ui-button-success mr-2"/>
+                    <p:commandButton icon="pi pi-trash" action="#{tarefaBean.remover(t)}"
+                                     update="formListagem :messages" styleClass="ui-button-outlined ui-button-danger">
+                        <p:confirm header="Confirmação" message="Excluir esta tarefa?"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </cc:implementation>
+</ui:component>

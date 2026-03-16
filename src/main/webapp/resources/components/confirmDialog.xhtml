@@ -1,0 +1,22 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:h="jakarta.faces.html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:cc="jakarta.faces.composite">
+    <cc:interface>
+        <cc:attribute name="yesLabel" required="false" default="Sim"/>
+        <cc:attribute name="noLabel" required="false" default="Não"/>
+    </cc:interface>
+
+    <cc:implementation>
+        <h:form id="formConfirmacao">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                             appendTo="@(body)" position="center" styleClass="confirmacao-dialog">
+                <p:commandButton value="#{cc.attrs.noLabel}" type="button"
+                                 styleClass="ui-confirmdialog-no ui-button-flat" icon="pi pi-times"/>
+                <p:commandButton value="#{cc.attrs.yesLabel}" type="button"
+                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+            </p:confirmDialog>
+        </h:form>
+    </cc:implementation>
+</ui:component>

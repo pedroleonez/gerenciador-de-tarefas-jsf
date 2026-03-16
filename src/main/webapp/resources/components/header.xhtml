@@ -1,0 +1,20 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="jakarta.faces.facelets"
+              xmlns:h="jakarta.faces.html"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:cc="jakarta.faces.composite">
+    <cc:interface>
+        <cc:attribute name="title" required="false" default="Gerenciador de Tarefas"/>
+    </cc:interface>
+
+    <cc:implementation>
+        <div class="header">
+            <h:form id="formHeader">
+                <p:menubar>
+                    <p:menuitem value="#{cc.attrs.title}" disabled="true"
+                                style="font-weight: bold; font-size: 36px; color: #333; opacity: 1;"/>
+                </p:menubar>
+            </h:form>
+        </div>
+    </cc:implementation>
+</ui:component>
